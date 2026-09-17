@@ -1,6 +1,9 @@
-﻿using Intro_POO.clases;
-using Humanizer; // Librería para humanizar fechas y tiempos, por ejemplo, convertir un intervalo de tiempo en una frase legible para humanos.
+﻿using Humanizer; // Librería para humanizar fechas y tiempos, por ejemplo, convertir un intervalo de tiempo en una frase legible para humanos.
+using Intro_POO.clases;
+using Intro_POO.herencias;
+using System.Globalization;
 
+//============================================== Martes 14 Septiembre 2026 ============================================================================================================================================
 /*
 Persona persona = new Persona(); // Create an instance of the Persona class
 persona.Nombre = "Raul"; // Set the Nombre property"
@@ -55,8 +58,37 @@ Console.WriteLine($"Tiempo transcurrido: {(hoy - nacimiento).Humanize()}");
 Persona personaCuatro = new Persona("Wendy", "Esquivel", "Calvario", nacimiento); // Aqui se asignan los valores tal cual como los parametros del constructor de la clase Persona, en el orden que se definieron en el constructor.
 Console.WriteLine($"Hola {personaCuatro.Nombre} {personaCuatro.ApellidoP} {personaCuatro.ApellidoM}" +
     $"tienes la edad de {edad}");
-*/
 
 Persona personaCinco = new Persona("Wendy", "Esquivel", "Calvario", new DateTime(2004, 5, 12)); // Aqui se asignan los valores tal cual como los parametros del constructor de la clase Persona, en el orden que se definieron en el constructor.
 Console.WriteLine($"Hola {personaCinco.Nombre} {personaCinco.ApellidoP} {personaCinco.ApellidoM}" +
     $"tienes la edad de {personaCinco.calcularEdad(personaCinco.Fechanacimiento)}");
+*/
+
+// ============================================================== Jueves 17  Septiembre 2026 =============================================================================================================================================
+
+// 1. Instanciar y probar la clase Programador
+Programador prog = new Programador("C#", 15);
+prog.Nombre = "Josue";
+prog.Edad = 22;
+prog.Sueldo = 25000;
+
+
+Console.WriteLine("=== PRUEBA PROGRAMADOR ===");
+prog.MostrarInfo();              // Método heredado de Empleado
+prog.Trabajar();                 // Método heredado de Empleado
+prog.LenguajeDeProgramacion();   // Método propio
+prog.Programar();                // Método propio
+
+Console.WriteLine();
+
+// 2. Instanciar y probar la clase Diseñador
+Diseñador dis = new Diseñador("Figma", 3);
+dis.Nombre = "Carlos";
+dis.Edad = 25;
+dis.Sueldo = 22000;
+
+Console.WriteLine("=== PRUEBA DISEÑADOR ===");
+dis.MostrarInfo();              // Método heredado de Empleado
+dis.Trabajar();                 // Método heredado de Empleado
+dis.HerramientaDeDiseño();      // Método propio
+dis.Diseñar();                  // Método propio
