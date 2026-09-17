@@ -1,5 +1,5 @@
 ﻿using Intro_POO.clases;
-using Humanizer;
+using Humanizer; // Librería para humanizar fechas y tiempos, por ejemplo, convertir un intervalo de tiempo en una frase legible para humanos.
 
 /*
 Persona persona = new Persona(); // Create an instance of the Persona class
@@ -15,17 +15,22 @@ persona.ApellidoP = "Garcia"; // Set the ApellidoP property
 persona.ApellidoM = "Orlando"; // Set the ApellidoM property
 persona.Edad = 26; // Set the Edad property
 
-// De esta manera, personaDos también refleja los cambios realizados en persona, ya que ambos apuntan a la misma instancia de la clase Persona.
+// De esta manera, personaDos también refleja los cambios realizados en persona,
+// ya que ambos apuntan a la misma instancia de la clase Persona.
 Persona persona2 = new Persona();
-persona.Nombre = "Julia"; // Set the Nombre property"
-persona.ApellidoP = "Garcia"; // Set the ApellidoP property
-persona.ApellidoM = "Orlando"; // Set the ApellidoM property
-persona.Edad = 26; // Set the Edad property
+persona2.Nombre = "Gerath"; // Set the Nombre property"
+persona2.ApellidoP = "Hernandez"; // Set the ApellidoP property
+persona2.ApellidoM = "Tellez"; // Set the ApellidoM property
+persona2.Edad = 15; // Set the Edad property
 
+// El $ es un operador de interpolación de cadenas que permite insertar expresiones dentro de una cadena de
+// texto, facilitando la construcción de mensajes dinámicos.
 Console.WriteLine($"Hola {persona.Nombre} {persona.ApellidoP} {persona.ApellidoM}" + 
     $"tines la edad de {persona.Edad}");
 Console.WriteLine($"Hola {personaDos.Nombre} {personaDos.ApellidoP} {personaDos.ApellidoM}" +
     $"tines la edad de {personaDos.Edad}");
+Console.WriteLine($"Hola {persona2.Nombre} {persona2.ApellidoP} {persona2.ApellidoM}" +
+    $"tines la edad de {persona2.Edad}");
 */
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -36,7 +41,7 @@ Persona persona3 = new Persona(lastname1: "Esquivel", lastname2: "Calvario", nam
 */
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 DateTime nacimiento = Convert.ToDateTime("25/09/1995"); // Se crea una variable de tipo DateTime y se le asigna un valor de fecha, en este caso, la fecha de nacimiento de la persona.
 DateTime hoy = DateTime.Today;
 
@@ -50,3 +55,8 @@ Console.WriteLine($"Tiempo transcurrido: {(hoy - nacimiento).Humanize()}");
 Persona personaCuatro = new Persona("Wendy", "Esquivel", "Calvario", nacimiento); // Aqui se asignan los valores tal cual como los parametros del constructor de la clase Persona, en el orden que se definieron en el constructor.
 Console.WriteLine($"Hola {personaCuatro.Nombre} {personaCuatro.ApellidoP} {personaCuatro.ApellidoM}" +
     $"tienes la edad de {edad}");
+*/
+
+Persona personaCinco = new Persona("Wendy", "Esquivel", "Calvario", new DateTime(2004, 5, 12)); // Aqui se asignan los valores tal cual como los parametros del constructor de la clase Persona, en el orden que se definieron en el constructor.
+Console.WriteLine($"Hola {personaCinco.Nombre} {personaCinco.ApellidoP} {personaCinco.ApellidoM}" +
+    $"tienes la edad de {personaCinco.calcularEdad(personaCinco.Fechanacimiento)}");
