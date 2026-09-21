@@ -10,5 +10,12 @@ namespace Intro_POO.clases
         public int ID { get; set; }
         public string Nombre { get; set; }
         public double Precio { get; set; }
+
+        public void MostrarInfo()
+        {
+            Console.WriteLine($"ID: {ID}");
+            Console.WriteLine($"Nombre: {Nombre}");
+            Console.WriteLine($"Precio: {Precio}");
+        }
     }
 }
