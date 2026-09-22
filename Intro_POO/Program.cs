@@ -2,6 +2,8 @@
 using Intro_POO.clases;
 using Intro_POO.herencias; // Librería para humanizar fechas y tiempos, por ejemplo, convertir un intervalo de tiempo en una frase legible para humanos.
 using Intro_POO.interfaces.Repositorios;
+using MySql.Data.MySqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 //============================================== Martes 14 Septiembre 2026 ============================================================================================================================================
 /*
@@ -101,15 +103,21 @@ diseñador.Diseñar();
 Console.WriteLine("============== Menu Principal ==============");
 Console.WriteLine("1. Empleado");
 Console.WriteLine("2. Producto");
-Console.WriteLine("3. Mostrar información");
 int opcion = Convert.ToInt32(Console.ReadLine());
+
+Console.WriteLine("============================================");
+
 Console.WriteLine("Que opción desea realizar?");
 Console.WriteLine("R. Registrar");
 Console.WriteLine("A. Actualizar");
 Console.WriteLine("E. Eliminar");
-Console.WriteLine("P. Mostrar información Empleados");
-Console.WriteLine("M. Mostrar información Productos");
 string accion = Console.ReadLine().ToUpper();
+
+Console.WriteLine("============================================");
+
+/* El parámetro TreatTinyAsBoolean=false se utiliza para indicar que los valores de tipo TINYINT en la base de datos no deben ser tratados como booleanos,
+sino como enteros. Esto es útil cuando se trabaja con campos que pueden tener valores distintos a 0 y 1, como por ejemplo, un campo que representa un estado o una categoría. */
+string MySQlLocalInfo = "Server=localhost;Database=poo;User=root;Password=180304;TreatTinyAsBoolean=false;";  
 
 switch (opcion)
 {
@@ -119,28 +127,65 @@ switch (opcion)
 
         switch (accion)
         {
+
+            // Empleados
+            // Martes 22 Septiembre 2026
+            // Implementacion de la base de datos MySQL para registrar, actualizar y eliminar empleados
             case "R":
-                Console.WriteLine("Ingrese el ID del empleado:");
-                empleado.ID = Convert.ToInt32(Console.ReadLine());
+                // Console.WriteLine("Ingrese el ID del empleado:");
+                // empleado.ID = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Ingrese el nombre del empleado:");
                 empleado.Nombre = Console.ReadLine();
                 Console.WriteLine("Ingrese la edad del empleado:");
                 empleado.Edad = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Ingrese el sueldo del empleado:");
-                empleado.Sueldo = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("Ingrese el salario del empleado:");
+                empleado.Salario = Convert.ToDouble(Console.ReadLine());
 
                 rEmpleado.Registro(empleado);
                 break;
             case "A":
+                
                 Console.WriteLine("Ingrese el ID del empleado a actualizar:");
                 empleado.ID = Convert.ToInt32(Console.ReadLine());
+                MySqlConnection conexion = new MySqlConnection(MySQlLocalInfo);
+                MySqlCommand comando = new MySqlCommand("SELECT ID, Nombre, Edad, Salario FROM empleados WHERE ID = @ID", conexion);
+                comando.Parameters.AddWithValue("@ID", empleado.ID);
+
+                // Mostrar la informacion del empleado a actualizar
+                Console.WriteLine("\n\n====== Información del empleado a actualizar: ======\n\n");
+                try
+                {
+                    conexion.Open();
+                    MySqlDataReader reader = comando.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        Console.WriteLine($"ID: {reader["ID"]}");
+                        Console.WriteLine($"Nombre: {reader["Nombre"]}");
+                        Console.WriteLine($"Edad: {reader["Edad"]}");
+                        Console.WriteLine($"Salario: {reader["Salario"]}");
+                        Console.WriteLine("\n\n====================================================\n\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Empleado no encontrado.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al consultar empleado: {ex.Message}");
+                }
+                finally
+                {
+                    conexion.Close();
+                }
+                // Ingresar la nueva informacion del empleado a actualizar
                 Console.WriteLine("Ingrese el nuevo nombre del empleado:");
                 empleado.Nombre = Console.ReadLine();
                 Console.WriteLine("Ingrese la nueva edad del empleado:");
                 empleado.Edad = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Ingrese el nuevo sueldo del empleado:");
-                empleado.Sueldo = Convert.ToDouble(Console.ReadLine());
-
+                Console.WriteLine("Ingrese el nuevo salario del empleado:");
+                empleado.Salario = Convert.ToDouble(Console.ReadLine());
+                
                 rEmpleado.Actualizar(empleado);
                 break;
             case "E":
@@ -154,6 +199,8 @@ switch (opcion)
                 break;
         }
         break;
+
+        // Productos
     case 2:
         RProductos rProductos = new RProductos();
         Producto producto = new Producto();
@@ -185,29 +232,6 @@ switch (opcion)
                 producto.ID = Convert.ToInt32(Console.ReadLine());
 
                 rProductos.Eliminar(producto);
-                break;
-            default:
-                Console.WriteLine("Acción no válida.");
-                break;
-        }
-        break;
-
-    case 3:
-        switch (accion)
-        {
-            case "P":
-                Console.WriteLine("Mostrando información de empleados...");
-                // Aquí puedes agregar la lógica para mostrar la información de los empleados
-                Empleado empleadoInfo = new Empleado();
-                empleadoInfo.MostrarInfo();
-
-                break;
-            case "M":
-                Console.WriteLine("Mostrando información de productos...");
-                // Aquí puedes agregar la lógica para mostrar la información de los productos
-                Producto productoInfo = new Producto();
-                productoInfo.MostrarInfo();
-
                 break;
             default:
                 Console.WriteLine("Acción no válida.");

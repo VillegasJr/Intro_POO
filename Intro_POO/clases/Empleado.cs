@@ -10,14 +10,14 @@ namespace Intro_POO.clases
         public int ID { get; set; } // Agg 21/09/2026
         public string Nombre { get; set; }
         public int Edad { get; set; }
-        public double Sueldo { get; set; }
+        public double Salario { get; set; }
 
         public void MostrarInfo()
         {
             Console.WriteLine($"ID: {ID}"); // Agg 21/09/2026
             Console.WriteLine($"Nombre: {Nombre}");
             Console.WriteLine($"Edad: {Edad}");
-            Console.WriteLine($"Sueldo: {Sueldo}");
+            Console.WriteLine($"Salario: {Salario}");
         }
 
         public void Trabajar()
