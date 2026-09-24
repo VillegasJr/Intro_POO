@@ -19,6 +19,9 @@ Edad TINYINT(1) NOT NULL, Salario DECIMAL(8,2) NOT NULL);
 CREATE TABLE Productos (ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Nombre VARCHAR(45) NOT NULL, 
 Precio DECIMAL(7,2) NOT NULL);
 #==========================================================
+# =========== Actualizar la tabla de Productos ===========
+ALTER TABLE productos MODIFY Nombre VARCHAR(200) NOT NULL;
+#=========================================================
 
 #----------------------------------------------------------
 
