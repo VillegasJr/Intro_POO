@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 // Martes 22 de Septiembre 2026
 using MySql.Data; // Agregar la referencia a MySql.Data
-using MySql.Data.MySqlClient; // Agregar la referencia a MySql.Data.MySqlClient
+using MySql.Data.MySqlClient;
+using System.Net.Http.Headers; // Agregar la referencia a MySql.Data.MySqlClient
 
 namespace Intro_POO.interfaces.Repositorios
 {
     // Lunes 21 de Septiembre 2026
-    internal class REmpleado : IRepositorio<Empleado>
+    internal class REmpleado : IRepositorio<Empleado>, IClaveUnica
     {
         // ================ Martes 22 de Sptiembre 2026 ========================
         // Cadena de conexión a la base de datos MySQL 
@@ -18,10 +19,11 @@ namespace Intro_POO.interfaces.Repositorios
         public void Registro(Empleado empleado)
         {
             MySqlConnection conexion = new MySqlConnection(MySQlLocal);
-            MySqlCommand comando = new MySqlCommand("INSERT INTO empleados (Nombre, Edad, Salario) VALUES (@Nombre, @Edad, @Salario)", conexion); // Polimorfismo tipo de sobrecarga de métodos
+            MySqlCommand comando = new MySqlCommand("INSERT INTO empleados (Nombre, Edad, Salario, Clave_Unica) VALUES (@Nombre, @Edad, @Salario, @Clave_Unica)", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@Nombre", empleado.Nombre);
             comando.Parameters.AddWithValue("@Edad", empleado.Edad);
             comando.Parameters.AddWithValue("@Salario", empleado.Salario);
+            comando.Parameters.AddWithValue("@Clave_Unica", empleado.Clave);
             try
             {
                 // Abrimos la conexión a la base de datos
@@ -188,5 +190,32 @@ namespace Intro_POO.interfaces.Repositorios
             return lista;
         }
         //===========================================================================================================
+
+        public string Verificacion(string clave)
+        {
+            string MySQlLocalInfo = "Server=localhost;Database=poo;User=root;Password=180304;TreatTinyAsBoolean=false;";
+
+            MySqlConnection conexion = new MySqlConnection(MySQlLocalInfo);
+            MySqlCommand comando = new MySqlCommand("SELECT Nombre FROM Empleados WHERE Clave_Unica = @Clave_Unica", conexion);
+            comando.Parameters.AddWithValue("Clave_Unica", clave);
+            try
+            {
+                conexion.Open();
+
+                object resultado = comando.ExecuteScalar();
+                if (resultado != null){
+                    return resultado.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al conectar: " + ex.Message);
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return null;
+        }
     }
 }
