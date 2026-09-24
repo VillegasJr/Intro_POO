@@ -111,7 +111,11 @@ Console.WriteLine("Que opción desea realizar?");
 Console.WriteLine("R. Registrar");
 Console.WriteLine("A. Actualizar");
 Console.WriteLine("E. Eliminar");
-string accion = Console.ReadLine().ToUpper();
+// =========================== Miercoles 23 Septiembre 2026 ==========================
+Console.WriteLine("I. Listar");
+Console.WriteLine("B. Buscar");
+//=====================================================================================
+string accion = Console.ReadLine().ToUpper(); 
 
 Console.WriteLine("============================================");
 
@@ -124,6 +128,9 @@ switch (opcion)
     case 1:
         REmpleado rEmpleado = new REmpleado();
         Empleado empleado = new Empleado();
+        // =========================== Miercoles 23 Septiembre 2026 ==========================
+        List<Empleado> empleadosList = rEmpleado.Lista();
+        //=====================================================================================
 
         switch (accion)
         {
@@ -132,8 +139,6 @@ switch (opcion)
             // Martes 22 Septiembre 2026
             // Implementacion de la base de datos MySQL para registrar, actualizar y eliminar empleados
             case "R":
-                // Console.WriteLine("Ingrese el ID del empleado:");
-                // empleado.ID = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Ingrese el nombre del empleado:");
                 empleado.Nombre = Console.ReadLine();
                 Console.WriteLine("Ingrese la edad del empleado:");
@@ -144,40 +149,21 @@ switch (opcion)
                 rEmpleado.Registro(empleado);
                 break;
             case "A":
-                
+                //========================== Miercoles 23 Septiembre 2026 ==========================
+                Console.WriteLine("\n\n====== Lista de empleados: ======");
+                foreach (Empleado emp in empleadosList)
+                {
+                    Console.WriteLine($"ID del Empleado:{emp.ID} - Nombre:{emp.Nombre} - Edad:{emp.Edad} - Salario:{emp.Salario}");
+                }
+                Console.WriteLine("====================================================\n\n");
+                //===================================================================================
+                //Selecionar ID del Empleado a Actualizar
                 Console.WriteLine("Ingrese el ID del empleado a actualizar:");
                 empleado.ID = Convert.ToInt32(Console.ReadLine());
-                MySqlConnection conexion = new MySqlConnection(MySQlLocalInfo);
+                /*MySqlConnection conexion = new MySqlConnection(MySQlLocalInfo);
                 MySqlCommand comando = new MySqlCommand("SELECT ID, Nombre, Edad, Salario FROM empleados WHERE ID = @ID", conexion);
-                comando.Parameters.AddWithValue("@ID", empleado.ID);
-
-                // Mostrar la informacion del empleado a actualizar
-                Console.WriteLine("\n\n====== Información del empleado a actualizar: ======\n\n");
-                try
-                {
-                    conexion.Open();
-                    MySqlDataReader reader = comando.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        Console.WriteLine($"ID: {reader["ID"]}");
-                        Console.WriteLine($"Nombre: {reader["Nombre"]}");
-                        Console.WriteLine($"Edad: {reader["Edad"]}");
-                        Console.WriteLine($"Salario: {reader["Salario"]}");
-                        Console.WriteLine("\n\n====================================================\n\n");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Empleado no encontrado.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error al consultar empleado: {ex.Message}");
-                }
-                finally
-                {
-                    conexion.Close();
-                }
+                comando.Parameters.AddWithValue("@ID", empleado.ID);*/
+                Console.WriteLine("===================================================\n");
                 // Ingresar la nueva informacion del empleado a actualizar
                 Console.WriteLine("Ingrese el nuevo nombre del empleado:");
                 empleado.Nombre = Console.ReadLine();
@@ -189,11 +175,51 @@ switch (opcion)
                 rEmpleado.Actualizar(empleado);
                 break;
             case "E":
+                //===================== Miercoles 23 de Septiembre 2026 ====================
+                Console.WriteLine("\n\n====== Lista de empleados: ======");
+                foreach (Empleado emp in empleadosList)
+                {
+                    Console.WriteLine($"ID del Empleado:{emp.ID} - Nombre:{emp.Nombre} - Edad:{emp.Edad} - Salario:{emp.Salario}");
+                }
+                Console.WriteLine("====================================================\n\n");
+                //==========================================================================
                 Console.WriteLine("Ingrese el ID del empleado a eliminar:");
                 empleado.ID = Convert.ToInt32(Console.ReadLine());
 
                 rEmpleado.Eliminar(empleado);
                 break;
+
+            // =========================== Miercoles 23 Septiembre 2026 ==========================
+            case "I":
+                // Mostrar la lista de empleados
+                Console.WriteLine("\n\n============= Lista de empleados ================");
+                for (int i = 0; i < empleadosList.Count; i++)
+                {
+                    Empleado emp = empleadosList[i];
+                    Console.WriteLine($"ID: {emp.ID} - Nombre: {emp.Nombre} - Edad: {emp.Edad} - Salario: {emp.Salario}");
+                }
+                Console.WriteLine("====================================================\n");
+                break;
+            case "B":
+                // Busqueda por Nombre del empleado
+                Console.WriteLine("Ingrese el nombre del empleado a buscar:");
+                string nombreBusqueda = Console.ReadLine();
+                List<Empleado> empleadosEncontrados = rEmpleado.Busqueda(nombreBusqueda);
+                
+                if (empleadosEncontrados.Count > 0)
+                {
+                    Console.WriteLine("Empleados encontrados:");
+                    foreach (Empleado emp in empleadosEncontrados)
+                    {
+                        Console.WriteLine($"ID: {emp.ID} - Nombre: {emp.Nombre} - Edad: {emp.Edad} - Salario: {emp.Salario}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Empleado no encontrado.");
+                }
+                break;
+            //=====================================================================================
             default:
                 Console.WriteLine("Acción no válida.");
                 break;
@@ -202,14 +228,13 @@ switch (opcion)
 
         // Productos
     case 2:
-        RProductos rProductos = new RProductos();
+        RProductos rProductos = new RProductos();                                   
         Producto producto = new Producto();
+        List<Producto> productosList = rProductos.Lista();
 
         switch (accion)
         {
             case "R":
-                Console.WriteLine("Ingrese el ID del producto:");
-                producto.ID = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Ingrese el nombre del producto:");
                 producto.Nombre = Console.ReadLine();
                 Console.WriteLine("Ingrese el precio del producto:");
@@ -218,8 +243,16 @@ switch (opcion)
                 rProductos.Registro(producto);
                 break;
             case "A":
-                Console.WriteLine("Ingrese el ID del producto a actualizar:");
+                Console.WriteLine("\n\n====== Lista de empleados: ======");
+                foreach (Producto prd in productosList)
+                {
+                    Console.WriteLine($"ID del Producto:{prd.ID} - Nombre:{prd.Nombre} - Precio:{prd.Precio}");
+                }
+                Console.WriteLine("====================================================\n\n");
+                //Selecionar ID del Empleado a Actualizar
+                Console.WriteLine("Ingrese el ID del empleado a actualizar:");
                 producto.ID = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("===================================================\n");
                 Console.WriteLine("Ingrese el nuevo nombre del producto:");
                 producto.Nombre = Console.ReadLine();
                 Console.WriteLine("Ingrese el nuevo precio del producto:");
@@ -228,10 +261,45 @@ switch (opcion)
                 rProductos.Actualizar(producto);
                 break;
             case "E":
+                Console.WriteLine("\n\n====== Lista de empleados: ======");
+                foreach (Producto prd in productosList)
+                {
+                    Console.WriteLine($"ID del Producto:{prd.ID} - Nombre:{prd.Nombre} - Salario:{prd.Precio}");
+                }
+                Console.WriteLine("====================================================\n\n");
                 Console.WriteLine("Ingrese el ID del producto a eliminar:");
                 producto.ID = Convert.ToInt32(Console.ReadLine());
 
                 rProductos.Eliminar(producto);
+                break;
+            case "I":
+                // Mostrar la lista de empleados
+                Console.WriteLine("\n\n============= Lista de empleados ================");
+                for (int i = 0; i < productosList.Count; i++)
+                {
+                    Producto prd = productosList[i];
+                    Console.WriteLine($"ID: {prd.ID} - Nombre: {prd.Nombre} - Precio: {prd.Precio}");
+                }
+                Console.WriteLine("====================================================\n");
+                break;
+            case "B":
+                // Busqueda por Nombre del empleado
+                Console.WriteLine("Ingrese el nombre del empleado a buscar:");
+                string nombreBusqueda = Console.ReadLine();
+                List<Producto> productosEncontrados = rProductos.Busqueda(nombreBusqueda);
+
+                if (productosEncontrados.Count > 0)
+                {
+                    Console.WriteLine("Productos encontrados:");
+                    foreach (Producto prd in productosEncontrados)
+                    {
+                        Console.WriteLine($"ID: {prd.ID} - Nombre: {prd.Nombre} - Salario: {prd.Precio}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Producto no encontrado.");
+                }
                 break;
             default:
                 Console.WriteLine("Acción no válida.");

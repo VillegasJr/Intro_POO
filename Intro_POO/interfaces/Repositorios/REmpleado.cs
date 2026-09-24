@@ -11,8 +11,9 @@ namespace Intro_POO.interfaces.Repositorios
     // Lunes 21 de Septiembre 2026
     internal class REmpleado : IRepositorio<Empleado>
     {
+        // ================ Martes 22 de Sptiembre 2026 ========================
         // Cadena de conexión a la base de datos MySQL 
-        string MySQlLocal = "Server=localhost;Database=poo;User=root;Password=180304;";
+        string MySQlLocal = "Server=localhost;Database=poo;User=root;Password=180304;"; // Esta es la variable que hace como referencia la conexión del MySQL
 
         public void Registro(Empleado empleado)
         {
@@ -33,7 +34,7 @@ namespace Intro_POO.interfaces.Repositorios
             catch (Exception ex)
             {
                 // Manejo de errores al abrir la conexión y mostramos un mensaje de error
-                Console.WriteLine($"Error al registrar empleado: {ex.Message}");
+                Console.WriteLine($"Error al registrar Empleado: {ex.Message}");
             }
             finally
             {
@@ -64,7 +65,7 @@ namespace Intro_POO.interfaces.Repositorios
             catch (Exception ex)
             {
                 // Manejo de errores al abrir la conexión y mostramos un mensaje de error
-                Console.WriteLine($"Error al registrar empleado: {ex.Message}");
+                Console.WriteLine($"Error al actualizar el Empleado: {ex.Message}");
             }
             finally
             {
@@ -91,7 +92,7 @@ namespace Intro_POO.interfaces.Repositorios
             catch (Exception ex)
             {
                 // Manejo de errores al abrir la conexión y mostramos un mensaje de error
-                Console.WriteLine($"Error al registrar empleado: {ex.Message}");
+                Console.WriteLine($"Error al eleminar el Empleado: {ex.Message}");
             }
             finally
             {
@@ -99,6 +100,93 @@ namespace Intro_POO.interfaces.Repositorios
                 conexion.Close();
             }
         }
-        
+        //====================================================================================
+
+        //=================================== Miercoles 23 de Septiembre 2026 =========================================
+        public List<Empleado> Lista()
+        {
+            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlCommand comando = new MySqlCommand("SELECT * FROM empleados", conexion);
+            List<Empleado> lista = new List<Empleado>();
+
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Ejecutamos la consulta SQL y obtenemos un lector de datos
+                MySqlDataReader lector = comando.ExecuteReader();
+                // Mostramos los datos de los empleados en la consola
+                
+                if (lector.HasRows) // 
+                {
+                    while (lector.Read())
+                    {
+                        Empleado empleado = new Empleado();
+                        empleado.ID = Convert.ToInt32(lector.GetInt32("ID"));
+                        empleado.Nombre = Convert.ToString(lector.GetString("Nombre"));
+                        empleado.Edad = Convert.ToInt32(lector.GetByte("Edad"));
+                        empleado.Salario = Convert.ToDouble(lector.GetDouble("Salario"));
+                        
+                        lista.Add(empleado);
+                    }
+                }
+                lector.Close();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al listar empleados: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+            return lista;
+        }
+
+        public List<Empleado> Busqueda(string nombre)
+        {
+            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlCommand comando = new MySqlCommand("SELECT * FROM Empleados WHERE Nombre LIKE @nombre", conexion);
+            comando.Parameters.AddWithValue("@nombre", $"%{nombre}%");
+            List<Empleado> lista = new List<Empleado>();
+
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Ejecutamos la consulta SQL y obtenemos un lector de datos
+                MySqlDataReader lector = comando.ExecuteReader();
+                // Mostramos los datos de los empleados en la consola
+
+                if (lector.HasRows)
+                {
+                    while (lector.Read())
+                    {
+                        Empleado empleado = new Empleado();
+                        empleado.ID = Convert.ToInt32(lector.GetInt32("ID"));
+                        empleado.Nombre = Convert.ToString(lector.GetString("Nombre"));
+                        empleado.Edad = Convert.ToInt32(lector.GetByte("Edad"));
+                        empleado.Salario = Convert.ToDouble(lector.GetDouble("Salario"));
+
+                        lista.Add(empleado);
+                    }
+                }
+                lector.Close();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al listar empleados: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+            return lista;
+        }
+        //===========================================================================================================
     }
 }

@@ -1,0 +1,34 @@
+﻿SHOW DATABASES;
+# ============= Creación de la Base de Datos ==============
+CREATE DATABASE POO;
+#==========================================================
+# ============= Hacer uso de la Base de Datos =============
+USE Poo;
+#==========================================================
+# ============== Eliminar la tabla de la BD ===============
+# Drop table Empleados;
+#==========================================================
+# ============ Creación de la tabla Empleados =============
+CREATE TABLE Empleados (ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Nombre VARCHAR(45) NOT NULL, 
+Edad TINYINT(1) NOT NULL, Salario DECIMAL(8,2) NOT NULL);
+#==========================================================
+
+#----------------------------------------------------------
+
+# =========== Creación de la tabla de Productos ===========
+CREATE TABLE Productos (ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Nombre VARCHAR(45) NOT NULL, 
+Precio DECIMAL(7,2) NOT NULL);
+#==========================================================
+
+#----------------------------------------------------------
+
+# ============ Consulta de la tablas de la BD =============
+SHOW TABLES;
+# ========== Consulta de la Tabla de Empleados ============
+SELECT * FROM empleados;
+DESCRIBE empleados;
+#==========================================================
+# ========== Consulta de la Tabla de Empleados ============
+SELECT * FROM productos;
+DESCRIBE productos;
+#==========================================================
