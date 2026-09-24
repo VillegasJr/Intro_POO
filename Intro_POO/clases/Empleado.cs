@@ -11,6 +11,7 @@ namespace Intro_POO.clases
         public string Nombre { get; set; }
         public int Edad { get; set; }
         public double Salario { get; set; }
+        public int Clave { get; set; }
 
         public void MostrarInfo()
         {
