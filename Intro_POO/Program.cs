@@ -4,6 +4,7 @@ using Intro_POO.herencias; // Librería para humanizar fechas y tiempos, por eje
 using Intro_POO.interfaces.Repositorios;
 using MySql.Data.MySqlClient;
 using System.Reflection.Emit;
+using ZstdSharp.Unsafe;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 //============================================== Martes 14 Septiembre 2026 ============================================================================================================================================
@@ -107,6 +108,7 @@ string nombreEmpleado = "";
 bool esValido = false;
 int opcion = 0;
 string accion = "";
+string accionVenta = "";
 
 // Bucle para autenticar la clave del empleado
 while (!esValido)
@@ -135,7 +137,7 @@ while (!esValido)
 
             if (int.TryParse(Console.ReadLine(), out opcion))
             {
-                if (opcion >= 1 && opcion <= 3)
+                if (opcion == 1 || opcion == 2)
                 {
                     Console.Clear();
                     Console.WriteLine("============================================\n");
@@ -148,6 +150,18 @@ while (!esValido)
                     Console.Write("Selecciona tu acción: ");
 
                     accion = Console.ReadLine().ToUpper();
+
+                    Console.Clear();
+                    Acciones(); // Ejecuta la acción en MySQL
+                }
+                else if (opcion == 3)
+                {
+                    Console.Clear();
+                    Console.WriteLine("V. Venta");
+                    Console.WriteLine("H. Historial");
+                    Console.Write("Que quieres realizar: ");
+
+                    accionVenta = Console.ReadLine().ToUpper();
 
                     Console.Clear();
                     Acciones(); // Ejecuta la acción en MySQL
@@ -298,7 +312,7 @@ void Acciones() {
                     Console.WriteLine("Ingrese el nombre del producto:");
                     producto.Nombre = Console.ReadLine();
                     Console.WriteLine("Ingrese el precio del producto:");
-                    producto.Precio = Convert.ToDouble(Console.ReadLine());
+                    producto.Precio = Convert.ToDecimal(Console.ReadLine());
 
                     rProductos.Registro(producto);
                     break;
@@ -316,7 +330,7 @@ void Acciones() {
                     Console.WriteLine("Ingrese el nuevo nombre del producto:");
                     producto.Nombre = Console.ReadLine();
                     Console.WriteLine("Ingrese el nuevo precio del producto:");
-                    producto.Precio = Convert.ToDouble(Console.ReadLine());
+                    producto.Precio = Convert.ToDecimal(Console.ReadLine());
 
                     rProductos.Actualizar(producto);
                     break;
@@ -369,7 +383,47 @@ void Acciones() {
 
         // Tienda
         case 3:
+            switch (accionVenta)
+            {
+                case "V":
+                    RProductos rProducto = new RProductos();
+                    Venta venta = new Venta();
+                    venta.codigoVenta = DateTime.Now.ToString("yyyymmddss");
+                    venta.fecha = DateTime.Now;
+                    List<string> tiket = new List<string>();
+                    //venta.empleado = nombreEmpleado;
+                    string newP = "P";
 
+                    // Agregar productos a la venta
+                    while (newP == "P")
+                    {
+                        Console.Write("ID del producto: ");
+                        int prdID = Convert.ToInt32(Console.ReadLine());
+                        Console.Write("Cantidad de productos: ");
+                        decimal cant = Convert.ToDecimal(Console.ReadLine());
+
+                        Producto InfPro = rProducto.ObtenerID(prdID);
+                        venta.AgregraProducto(InfPro, cant);
+
+                        Console.WriteLine("Agregar otro producto");
+                        Console.WriteLine("A: Agregar");
+                        Console.WriteLine("C: Cobrar");
+                        newP = Console.ReadLine().ToUpper();
+                        Console.Clear();
+                    }
+                    Console.WriteLine("Cobrando....");
+                    // Mostrar Ticket 
+                    Console.WriteLine("Producto -------- Precio Unidad -------- Cantidad -------- Total");
+                    foreach (VentaProductos prd in venta.productos)
+                    {
+                        Console.WriteLine($"{prd.Producto.Nombre}           {prd.Producto.Precio}          {prd.Cantidad}          {prd.Total}");
+                    }
+                    Console.WriteLine($"Total ${venta.total}");
+                    break;
+                default:
+                    Console.WriteLine("Acción no válida.");
+                    break;
+            }
             break;
 
         default:

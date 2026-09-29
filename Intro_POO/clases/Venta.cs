@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Intro_POO.clases
+{
+    internal class Venta
+    {
+        public string codigoVenta { get; set; }
+        public List<VentaProductos> productos{ get; set; }
+        public Empleado empleado { get; set; }
+        public DateTime fecha { get; set; }
+        public decimal total { get; set; }
+
+        public void AgregraProducto(Producto producto, decimal cantidad)
+        {
+            // Precio por cantidad de productos
+            decimal productosT = producto.Precio * cantidad;
+
+            VentaProductos productoVenta = new VentaProductos();
+            productoVenta.Producto = producto;
+            productoVenta.Cantidad = cantidad;
+            productoVenta.Total = productosT;
+
+            // Agregar la venta del producto
+            productos.Add(productoVenta);
+            // Calcular total
+            total += productosT;
+        }
+    }
+}

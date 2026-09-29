@@ -117,7 +117,7 @@ namespace Intro_POO.interfaces.Repositorios
                         Producto producto = new Producto();
                         producto.ID = Convert.ToInt32(lector.GetInt32("ID"));
                         producto.Nombre = Convert.ToString(lector.GetString("Nombre"));
-                        producto.Precio = Convert.ToDouble(lector.GetDouble("Precio"));
+                        producto.Precio = Convert.ToDecimal(lector.GetDouble("Precio"));
 
                         productosLista.Add(producto);
                     }
@@ -159,7 +159,7 @@ namespace Intro_POO.interfaces.Repositorios
                         Producto producto = new Producto();
                         producto.ID = Convert.ToInt32(lector.GetInt32("ID"));
                         producto.Nombre = Convert.ToString(lector.GetString("Nombre"));
-                        producto.Precio = Convert.ToDouble(lector.GetDouble("Precio"));
+                        producto.Precio = Convert.ToDecimal(lector.GetDecimal("Precio"));
 
                         productosBusqueda.Add(producto);
                     }
@@ -179,5 +179,40 @@ namespace Intro_POO.interfaces.Repositorios
             return productosBusqueda;
         }
         //===========================================================================================
+
+        public Producto ObtenerID(int ID)
+        {
+            Producto producto = null;
+            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("SELECT * FROM productos WHERE ID = @ID", conexion);
+            comando.Parameters.AddWithValue("@ID", ID);
+
+            try
+            {
+                conexion.Open();
+                MySqlDataReader lector = comando.ExecuteReader();
+
+                if (lector.HasRows && lector.Read())
+                {
+                    producto = new Producto();
+                    producto.ID = lector.GetInt32("ID");
+                    producto.Nombre = lector.GetString("Nombre");
+                    producto.Precio = lector.GetDecimal("Precio");
+                }
+
+                lector.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener el Producto por ID: {ex.Message}");
+            }
+            finally
+            {
+                conexion.Close();
+            }
+
+            return producto;
+
+        }
     }
 }

@@ -217,5 +217,15 @@ namespace Intro_POO.interfaces.Repositorios
             }
             return null;
         }
+
+        public void ObtenerID(Empleado obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Producto ObtenerID(int ID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

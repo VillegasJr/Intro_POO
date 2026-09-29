@@ -24,8 +24,9 @@ namespace Intro_POO.interfaces
         public List<T> Lista(); 
         
         public List<T> Busqueda(string nombre); // Declaramos el metodo Busqueda, que recibe un string y retorna una lista de objetos de tipo T.
-                                                //=================================================================================================
-
+        //=================================================================================================
+        // 29 septiembre 2026 
+        Producto ObtenerID(int ID);
 
         //============================ Jueves 24 de Septiembre 2026 =======================================
         // Nueva interfaz solo con la función específica
@@ -34,5 +35,7 @@ namespace Intro_POO.interfaces
             bool Verificacion(Empleado empleado);
         }
         //=================================================================================================
+
+
     }
 }
