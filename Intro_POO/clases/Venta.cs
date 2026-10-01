@@ -7,7 +7,7 @@ namespace Intro_POO.clases
     internal class Venta
     {
         public string codigoVenta { get; set; }
-        public List<VentaProductos> productos{ get; set; }
+        public List<VentaProductos> productos { get; set; } = new List<VentaProductos>();
         public Empleado empleado { get; set; }
         public DateTime fecha { get; set; }
         public decimal total { get; set; }
