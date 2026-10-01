@@ -6,6 +6,7 @@ using System.Text;
 using MySql.Data; // Agregar la referencia a MySql.Data
 using MySql.Data.MySqlClient;
 using System.Net.Http.Headers; // Agregar la referencia a MySql.Data.MySqlClient
+using Intro_POO.interfaces.Repositorios;
 
 namespace Intro_POO.interfaces.Repositorios
 {
@@ -45,7 +46,6 @@ namespace Intro_POO.interfaces.Repositorios
             }
         }
 
-
         public void Actualizar(Empleado empleado)
         {
             MySqlConnection conexion = new MySqlConnection(MySQlLocal);
@@ -75,7 +75,6 @@ namespace Intro_POO.interfaces.Repositorios
                 conexion.Close();
             }
         }
-
 
         public void Eliminar(Empleado empleado)
         {
@@ -191,20 +190,30 @@ namespace Intro_POO.interfaces.Repositorios
         }
         //===========================================================================================================
 
-        public string Verificacion(string clave)
-        {
-            string MySQlLocalInfo = "Server=localhost;Database=poo;User=root;Password=180304;TreatTinyAsBoolean=false;";
 
-            MySqlConnection conexion = new MySqlConnection(MySQlLocalInfo);
-            MySqlCommand comando = new MySqlCommand("SELECT Nombre FROM Empleados WHERE Clave_Unica = @Clave_Unica", conexion);
-            comando.Parameters.AddWithValue("Clave_Unica", clave);
+
+
+
+
+
+        public Empleado? Verificacion(string clave)
+        {
+            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlCommand comando = new MySqlCommand("SELECT ID, Nombre FROM Empleados WHERE Clave_Unica = @Clave_Unica", conexion);
+            comando.Parameters.AddWithValue("@Clave_Unica", clave);
+
             try
             {
                 conexion.Open();
 
-                object resultado = comando.ExecuteScalar();
-                if (resultado != null){
-                    return resultado.ToString();
+                MySqlDataReader leer = comando.ExecuteReader();
+                if (leer.Read())
+                {
+                    return new Empleado
+                    {
+                        ID = leer.GetInt32("ID"),
+                        Nombre = leer.GetString("Nombre")
+                    };
                 }
             }
             catch (Exception ex)
@@ -218,14 +227,21 @@ namespace Intro_POO.interfaces.Repositorios
             return null;
         }
 
-        public void ObtenerID(Empleado obj)
-        {
-            throw new NotImplementedException();
-        }
+
+
+        //================================================================
+        // ESTOS MODELOS NO SE HACEN USO AQUI.
 
         public Producto ObtenerID(int ID)
         {
             throw new NotImplementedException();
         }
+
+        public void RegistrarVenta(Empleado obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        //================================================================
     }
 }

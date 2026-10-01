@@ -104,11 +104,11 @@ diseñador.Diseñar();
 /* El parámetro TreatTinyAsBoolean=false se utiliza para indicar que los valores de tipo TINYINT en la base de datos no deben ser tratados como booleanos,
 sino como enteros. Esto es útil cuando se trabaja con campos que pueden tener valores distintos a 0 y 1, como por ejemplo, un campo que representa un estado o una categoría. */
 REmpleado repoEmpleado = new REmpleado();
-string nombreEmpleado = "";
 bool esValido = false;
 int opcion = 0;
 string accion = "";
 string accionVenta = "";
+Empleado empleadoLogueado = null;
 
 // Bucle para autenticar la clave del empleado
 while (!esValido)
@@ -116,12 +116,12 @@ while (!esValido)
     Console.Write("Ingrese la clave del empleado: ");
     string claveIngresada = Console.ReadLine();
 
-    nombreEmpleado = repoEmpleado.Verificacion(claveIngresada);
+    empleadoLogueado = repoEmpleado.Verificacion(claveIngresada);
 
-    if (nombreEmpleado != null)
+    if (empleadoLogueado != null)
     {
         Console.Clear();
-        Console.WriteLine($"\nBienvenido(a): {nombreEmpleado}");
+        Console.WriteLine($"\nBienvenido(a): {empleadoLogueado.Nombre}");
         esValido = true;
 
         // Bucle del menú principal corregido (continúa mientras no sea una opción válida de salida)
@@ -387,15 +387,16 @@ void Acciones() {
             {
                 case "V":
                     RProductos rProducto = new RProductos();
+                    RVentas rVenta = new RVentas();
+
                     Venta venta = new Venta();
-                    venta.codigoVenta = DateTime.Now.ToString("yyyymmddss");
+                    venta.codigoVenta = DateTime.Now.ToString("yyyyMMddss");
                     venta.fecha = DateTime.Now;
-                    List<string> tiket = new List<string>();
-                    //venta.empleado = nombreEmpleado;
-                    string newP = "P";
+                    venta.empleado = empleadoLogueado;
+                    string newP = "A";
 
                     // Agregar productos a la venta
-                    while (newP == "P")
+                    while (newP == "A")
                     {
                         Console.Write("ID del producto: ");
                         int prdID = Convert.ToInt32(Console.ReadLine());
@@ -413,12 +414,19 @@ void Acciones() {
                     }
                     Console.WriteLine("Cobrando....");
                     // Mostrar Ticket 
-                    Console.WriteLine("Producto -------- Precio Unidad -------- Cantidad -------- Total");
+                    Console.WriteLine("Producto     --------     Precio Unidad     --------     Cantidad     --------     Total");
                     foreach (VentaProductos prd in venta.productos)
                     {
                         Console.WriteLine($"{prd.Producto.Nombre}           {prd.Producto.Precio}          {prd.Cantidad}          {prd.Total}");
                     }
                     Console.WriteLine($"Total ${venta.total}");
+
+                    Console.WriteLine("\nGuardando registro en la base de datos...");
+                    rVenta.RegistrarVenta(venta); // Llama a la inserción en 'ventas' y 'ventaproductos'
+
+                    Console.WriteLine("\nPresione cualquier tecla para continuar...");
+                    Console.ReadKey();
+
                     break;
                 default:
                     Console.WriteLine("Acción no válida.");

@@ -179,7 +179,6 @@ namespace Intro_POO.interfaces.Repositorios
             return productosBusqueda;
         }
         //===========================================================================================
-
         public Producto ObtenerID(int ID)
         {
             Producto producto = null;
@@ -214,5 +213,22 @@ namespace Intro_POO.interfaces.Repositorios
             return producto;
 
         }
+
+
+
+
+
+
+
+
+
+
+
+        // ==================== NO SE USA ESTE MODELO AQUI ====================
+        public void RegistrarVenta(Producto obj)
+        {
+            throw new NotImplementedException();
+        }
+        //=====================================================================
     }
 }

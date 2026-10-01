@@ -15,27 +15,29 @@ namespace Intro_POO.interfaces
     // Esto se le llama polimorfismo di
     internal interface IRepositorio<T> 
     {
-        public void Registro(T obj); // Declaramos el metodo Registro, que recibe un objeto de tipo T.
-        public void Actualizar(T obj); // Declaramos el metodo Actualizar, que recibe un objeto de tipo T.
-        public void Eliminar(T obj); // Declaramos el metodo Eliminar, que recibe un objeto de tipo T.
-
-
-        //============================== Miercoles 23 de Septiembre 2026 ===================================
+        // ======================== Implementadas en REmpleado y RProductos. ========================
+        public void Registro(T obj); 
+        public void Actualizar(T obj); 
+        public void Eliminar(T obj); 
         public List<T> Lista(); 
-        
-        public List<T> Busqueda(string nombre); // Declaramos el metodo Busqueda, que recibe un string y retorna una lista de objetos de tipo T.
-        //=================================================================================================
-        // 29 septiembre 2026 
-        Producto ObtenerID(int ID);
+        public List<T> Busqueda(string nombre);
+        //=============================================================================================
 
-        //============================ Jueves 24 de Septiembre 2026 =======================================
-        // Nueva interfaz solo con la función específica
-        internal interface IClaveUnica
-        {
-            bool Verificacion(Empleado empleado);
-        }
-        //=================================================================================================
+        // ======================== Implementado en RProductos ========================
+        Producto ObtenerID(int ID);
+        // =============================================================================
+
+        // ======================== Implementado en Rventa ========================
+        public void RegistrarVenta(T obj);
+        //=========================================================================
 
 
     }
+    //============================ Jueves 24 de Septiembre 2026 =======================================
+    // Nueva interfaz solo con la función específica
+    internal interface IClaveUnica
+    {
+        Empleado? Verificacion(string clave);
+    }
+    //=================================================================================================
 }
