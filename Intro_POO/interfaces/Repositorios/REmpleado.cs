@@ -13,13 +13,9 @@ namespace Intro_POO.interfaces.Repositorios
     // Lunes 21 de Septiembre 2026
     internal class REmpleado : IRepositorio<Empleado>, IClaveUnica
     {
-        // ================ Martes 22 de Sptiembre 2026 ========================
-        // Cadena de conexión a la base de datos MySQL 
-        string MySQlLocal = "Server=localhost;Database=poo;User=root;Password=180304;"; // Esta es la variable que hace como referencia la conexión del MySQL
-
         public void Registro(Empleado empleado)
         {
-            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("INSERT INTO empleados (Nombre, Edad, Salario, Clave_Unica) VALUES (@Nombre, @Edad, @Salario, @Clave_Unica)", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@Nombre", empleado.Nombre);
             comando.Parameters.AddWithValue("@Edad", empleado.Edad);
@@ -48,7 +44,7 @@ namespace Intro_POO.interfaces.Repositorios
 
         public void Actualizar(Empleado empleado)
         {
-            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("UPDATE empleados SET Nombre = @Nombre, Edad = @Edad, " +
                 "Salario = @Salario WHERE ID = @ID", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@ID", empleado.ID);
@@ -78,7 +74,7 @@ namespace Intro_POO.interfaces.Repositorios
 
         public void Eliminar(Empleado empleado)
         {
-            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("DELETE FROM empleados WHERE ID = @ID", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@ID", empleado.ID);
             try
@@ -101,12 +97,10 @@ namespace Intro_POO.interfaces.Repositorios
                 conexion.Close();
             }
         }
-        //====================================================================================
 
-        //=================================== Miercoles 23 de Septiembre 2026 =========================================
         public List<Empleado> Lista()
         {
-            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT * FROM empleados", conexion);
             List<Empleado> lista = new List<Empleado>();
 
@@ -148,7 +142,7 @@ namespace Intro_POO.interfaces.Repositorios
 
         public List<Empleado> Busqueda(string nombre)
         {
-            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT * FROM Empleados WHERE Nombre LIKE @nombre", conexion);
             comando.Parameters.AddWithValue("@nombre", $"%{nombre}%");
             List<Empleado> lista = new List<Empleado>();
@@ -188,17 +182,10 @@ namespace Intro_POO.interfaces.Repositorios
             }
             return lista;
         }
-        //===========================================================================================================
-
-
-
-
-
-
 
         public Empleado? Verificacion(string clave)
         {
-            MySqlConnection conexion = new MySqlConnection(MySQlLocal);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT ID, Nombre FROM Empleados WHERE Clave_Unica = @Clave_Unica", conexion);
             comando.Parameters.AddWithValue("@Clave_Unica", clave);
 
@@ -231,17 +218,22 @@ namespace Intro_POO.interfaces.Repositorios
 
         //================================================================
         // ESTOS MODELOS NO SE HACEN USO AQUI.
-
         public Producto ObtenerID(int ID)
         {
             throw new NotImplementedException();
         }
-
         public void RegistrarVenta(Empleado obj)
         {
             throw new NotImplementedException();
         }
-
+        public int GenerarCodigo()
+        {
+            throw new NotImplementedException();
+        }
+        public void HistorialVenta()
+        {
+            throw new NotImplementedException();
+        }
         //================================================================
     }
 }

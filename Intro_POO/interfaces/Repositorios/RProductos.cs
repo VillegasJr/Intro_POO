@@ -11,11 +11,10 @@ namespace Intro_POO.interfaces.Repositorios
     // Lunes 21 de Septiembre 2026
     internal class RProductos : IRepositorio<Producto>
     {
-        string MySqlConexion = "Server=localhost;Database=poo;User=root;Password=180304;";
         public void Registro(Producto producto)
         {
             // Realizar conexion de la base de datos
-            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("INSERT INTO productos (Nombre, Precio) VALUES (@Nombre, @Precio)", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
             comando.Parameters.AddWithValue("@Precio", producto.Precio);
@@ -42,7 +41,7 @@ namespace Intro_POO.interfaces.Repositorios
 
         public void Actualizar(Producto producto)
         {
-            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("UPDATE productos SET Nombre = @Nombre, Precio = @Precio WHERE ID = @ID", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@ID", producto.ID);
             comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
@@ -68,10 +67,9 @@ namespace Intro_POO.interfaces.Repositorios
             }
         }
 
-        // Implementación del método Eliminar de la interfaz IRepositorio
         public void Eliminar(Producto producto)
         {
-            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("DELETE FROM productos WHERE ID = @ID", conexion); // Polimorfismo tipo de sobrecarga de métodos
             comando.Parameters.AddWithValue("@ID", producto.ID);
             try
@@ -95,11 +93,10 @@ namespace Intro_POO.interfaces.Repositorios
             }
         }
 
-        //============================= Miercoles 23 de Septiembre 2026 ==============================
         public List<Producto> Lista()
         {
             List<Producto> productosLista = new List<Producto>();
-            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT * FROM productos", conexion);
 
             try
@@ -140,7 +137,7 @@ namespace Intro_POO.interfaces.Repositorios
         public List<Producto> Busqueda(string nombre)
         {
             List<Producto> productosBusqueda = new List<Producto>();
-            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT * FROM productos WHERE Nombre LIKE @nombre", conexion);
             comando.Parameters.AddWithValue("@nombre", $"%{nombre}%");
 
@@ -178,11 +175,11 @@ namespace Intro_POO.interfaces.Repositorios
             }
             return productosBusqueda;
         }
-        //===========================================================================================
+
         public Producto ObtenerID(int ID)
         {
             Producto producto = null;
-            MySqlConnection conexion = new MySqlConnection(MySqlConexion);
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT * FROM productos WHERE ID = @ID", conexion);
             comando.Parameters.AddWithValue("@ID", ID);
 
@@ -216,16 +213,16 @@ namespace Intro_POO.interfaces.Repositorios
 
 
 
-
-
-
-
-
-
-
-
         // ==================== NO SE USA ESTE MODELO AQUI ====================
         public void RegistrarVenta(Producto obj)
+        {
+            throw new NotImplementedException();
+        }
+        public int GenerarCodigo()
+        {
+            throw new NotImplementedException();
+        }
+        public void HistorialVenta()
         {
             throw new NotImplementedException();
         }

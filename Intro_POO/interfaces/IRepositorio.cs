@@ -29,6 +29,8 @@ namespace Intro_POO.interfaces
 
         // ======================== Implementado en Rventa ========================
         public void RegistrarVenta(T obj);
+        public int GenerarCodigo();
+        public List<Venta> HistorialVenta();
         //=========================================================================
 
 
