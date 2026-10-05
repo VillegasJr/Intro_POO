@@ -389,10 +389,7 @@ void Acciones() {
                     RProductos rProducto = new RProductos();
                     RVentas rVenta = new RVentas();
 
-                    Venta venta = new Venta();
-                    venta.codigoVenta = DateTime.Now.ToString("yyyyMMddss");
-                    venta.fecha = DateTime.Now;
-                    venta.empleado = empleadoLogueado;
+                    Venta venta = new Venta(empleadoLogueado);
                     string newP = "A";
 
                     // Agregar productos a la venta
@@ -414,10 +411,10 @@ void Acciones() {
                     }
                     Console.WriteLine("Cobrando....");
                     // Mostrar Ticket 
-                    Console.WriteLine("Producto     --------     Precio Unidad     --------     Cantidad     --------     Total");
+                    Console.WriteLine("Producto\t\tPrecio Unidad\t\tCantidad\t\tTotal");
                     foreach (VentaProductos prd in venta.productos)
                     {
-                        Console.WriteLine($"{prd.Producto.Nombre}           {prd.Producto.Precio}          {prd.Cantidad}          {prd.Total}");
+                        Console.WriteLine($"{prd.Producto.Nombre}\t\t{prd.Producto.Precio}\t\t{prd.Cantidad}\t\t{prd.Total}");
                     }
                     Console.WriteLine($"Total ${venta.total}");
 
@@ -426,6 +423,12 @@ void Acciones() {
 
                     Console.WriteLine("\nPresione cualquier tecla para continuar...");
                     Console.ReadKey();
+
+                    break;
+                case "H":
+                    /*Mostrar una lista de las ventas de la mas nueva a la mas antigua,
+                    y elegir una venta para ver los detalles de la misma,
+                    incluyendo los productos vendidos y el total de la venta.*/
 
                     break;
                 default:

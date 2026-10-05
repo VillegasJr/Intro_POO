@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Intro_POO.interfaces.Repositorios;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +9,7 @@ namespace Intro_POO.clases
     internal class Venta
     {
         public string codigoVenta { get; set; }
-        public List<VentaProductos> productos { get; set; } = new List<VentaProductos>();
+        public List<VentaProductos> productos { get; set; } //= new List<VentaProductos>();
         public Empleado empleado { get; set; }
         public DateTime fecha { get; set; }
         public decimal total { get; set; }
@@ -26,6 +28,20 @@ namespace Intro_POO.clases
             productos.Add(productoVenta);
             // Calcular total
             total += productosT;
+        }
+        // Constructor de la clase Venta
+        public Venta(Empleado empleadoLogueado)
+        {
+            codigoVenta = GenerarCodigoVenta();
+            fecha = DateTime.Now;
+            empleado = empleadoLogueado;
+            productos = new List<VentaProductos>();
+        }
+        private string GenerarCodigoVenta()
+        {
+            // Generar un código de venta único basado en la fecha y hora actual
+            RVentas rVentas = new RVentas();
+            return DateTime.Now.ToString("yyyyMMdd") + rVentas.GenerarCodigo().ToString("00");
         }
     }
 }
