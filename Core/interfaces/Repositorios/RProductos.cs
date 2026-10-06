@@ -1,0 +1,235 @@
+﻿using Google.Protobuf.Collections;
+using Core.clases;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using MySql.Data;
+using MySql.Data.MySqlClient;
+
+namespace Core.interfaces.Repositorios
+{
+    // Lunes 21 de Septiembre 2026
+    public class RProductos : IRepositorio<Producto>
+    {
+        public void Registro(Producto producto)
+        {
+            // Realizar conexion de la base de datos
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("INSERT INTO productos (Nombre, Precio) VALUES (@Nombre, @Precio)", conexion); // Polimorfismo tipo de sobrecarga de métodos
+            comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
+            comando.Parameters.AddWithValue("@Precio", producto.Precio);
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Agregamos los parámetros a la consulta SQL
+                comando.ExecuteNonQuery();
+                // Mostramos un mensaje de éxito al registrar el empleado
+                Console.WriteLine("Producto registrado");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al registrar el Producto: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+        }
+
+        public void Actualizar(Producto producto)
+        {
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("UPDATE productos SET Nombre = @Nombre, Precio = @Precio WHERE ID = @ID", conexion); // Polimorfismo tipo de sobrecarga de métodos
+            comando.Parameters.AddWithValue("@ID", producto.ID);
+            comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
+            comando.Parameters.AddWithValue("@Precio", producto.Precio);
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Agregamos los parámetros a la consulta SQL
+                comando.ExecuteNonQuery();
+                // Mostramos un mensaje de éxito al registrar el empleado
+                Console.WriteLine("Producto actualizado");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al actualizar el Producto: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+        }
+
+        public void Eliminar(Producto producto)
+        {
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("DELETE FROM productos WHERE ID = @ID", conexion); // Polimorfismo tipo de sobrecarga de métodos
+            comando.Parameters.AddWithValue("@ID", producto.ID);
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Agregamos los parámetros a la consulta SQL
+                comando.ExecuteNonQuery();
+                // Mostramos un mensaje de éxito al registrar el empleado
+                Console.WriteLine("Producto eliminado");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al eleminar el Producto: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+        }
+
+        public List<Producto> Lista()
+        {
+            List<Producto> productosLista = new List<Producto>();
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("SELECT * FROM productos", conexion);
+
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Ejecutamos la consulta SQL y obtenemos un lector de datos
+                MySqlDataReader lector = comando.ExecuteReader();
+                // Mostramos los datos de los empleados en la consola
+
+                if (lector.HasRows) // 
+                {
+                    while (lector.Read())
+                    {
+                        Producto producto = new Producto();
+                        producto.ID = Convert.ToInt32(lector.GetInt32("ID"));
+                        producto.Nombre = Convert.ToString(lector.GetString("Nombre"));
+                        producto.Precio = Convert.ToDecimal(lector.GetDouble("Precio"));
+
+                        productosLista.Add(producto);
+                    }
+                }
+                lector.Close();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al listar los Productos: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+            return productosLista;
+        }
+
+        public List<Producto> Busqueda(string nombre)
+        {
+            List<Producto> productosBusqueda = new List<Producto>();
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("SELECT * FROM productos WHERE Nombre LIKE @nombre", conexion);
+            comando.Parameters.AddWithValue("@nombre", $"%{nombre}%");
+
+            try
+            {
+                // Abrimos la conexión a la base de datos
+                conexion.Open();
+                // Ejecutamos la consulta SQL y obtenemos un lector de datos
+                MySqlDataReader lector = comando.ExecuteReader();
+                // Mostramos los datos de los empleados en la consola
+
+                if (lector.HasRows)
+                {
+                    while (lector.Read())
+                    {
+                        Producto producto = new Producto();
+                        producto.ID = Convert.ToInt32(lector.GetInt32("ID"));
+                        producto.Nombre = Convert.ToString(lector.GetString("Nombre"));
+                        producto.Precio = Convert.ToDecimal(lector.GetDecimal("Precio"));
+
+                        productosBusqueda.Add(producto);
+                    }
+                }
+                lector.Close();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores al abrir la conexión y mostramos un mensaje de error
+                Console.WriteLine($"Error al buscar los Productos: {ex.Message}");
+            }
+            finally
+            {
+                // Cerramos la conexión a la base de datos
+                conexion.Close();
+            }
+            return productosBusqueda;
+        }
+
+        public Producto ObtenerID(int ID)
+        {
+            Producto producto = null;
+            MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            MySqlCommand comando = new MySqlCommand("SELECT * FROM productos WHERE ID = @ID", conexion);
+            comando.Parameters.AddWithValue("@ID", ID);
+
+            try
+            {
+                conexion.Open();
+                MySqlDataReader lector = comando.ExecuteReader();
+
+                if (lector.HasRows && lector.Read())
+                {
+                    producto = new Producto();
+                    producto.ID = lector.GetInt32("ID");
+                    producto.Nombre = lector.GetString("Nombre");
+                    producto.Precio = lector.GetDecimal("Precio");
+                }
+
+                lector.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener el Producto por ID: {ex.Message}");
+            }
+            finally
+            {
+                conexion.Close();
+            }
+
+            return producto;
+
+        }
+
+
+
+        // ==================== NO SE USA ESTE MODELO AQUI ====================
+        public void RegistrarVenta(Producto obj)
+        {
+            throw new NotImplementedException();
+        }
+        public int GenerarCodigo()
+        {
+            throw new NotImplementedException();
+        }
+        public void HistorialVenta()
+        {
+            throw new NotImplementedException();
+        }
+        List<Venta> IRepositorio<Producto>.HistorialVenta()
+        {
+            throw new NotImplementedException();
+        }
+        //=====================================================================
+    }
+}
