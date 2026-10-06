@@ -1,7 +1,6 @@
-﻿using Humanizer;
-using Intro_POO.clases;
-using Intro_POO.herencias; // Librería para humanizar fechas y tiempos, por ejemplo, convertir un intervalo de tiempo en una frase legible para humanos.
-using Intro_POO.interfaces.Repositorios;
+﻿using Core.clases;
+using Core.herencias; // Librería para humanizar fechas y tiempos, por ejemplo, convertir un intervalo de tiempo en una frase legible para humanos.
+using Core.interfaces.Repositorios;
 using MySql.Data.MySqlClient;
 using System.Reflection.Emit;
 using ZstdSharp.Unsafe;
@@ -386,7 +385,7 @@ void Acciones() {
             switch (accionVenta)
             {
                 case "V":
-                    RProductos rProducto = new RProductos();
+                    RProductos rProducto = new RProductos(); 
                     RVentas rVenta = new RVentas();
 
                     Venta venta = new Venta(empleadoLogueado);
@@ -429,7 +428,66 @@ void Acciones() {
                     /*Mostrar una lista de las ventas de la mas nueva a la mas antigua,
                     y elegir una venta para ver los detalles de la misma,
                     incluyendo los productos vendidos y el total de la venta.*/
+                    RVentas rVentaHist = new RVentas();
+                    List<Venta> listaVentas = rVentaHist.HistorialVenta();
 
+                    Console.Clear();
+                    Console.WriteLine("================================= HISTORIAL DE VENTAS =================================");
+                    // Definimos anchos fijos: ID Venta (15), Fecha (22), Empleado (20), Total (12)
+                    Console.WriteLine($"{"ID Venta",-15} {"Fecha",-22} {"Empleado",-20} {"Total",12}");
+                    Console.WriteLine(new string('-', 72));
+
+                    if (listaVentas.Count == 0)
+                    {
+                        Console.WriteLine("No se encontraron ventas registradas.");
+                    }
+                    else
+                    {
+                        foreach (Venta v in listaVentas)
+                        {
+                            string nombreEmp = v.empleado != null ? v.empleado.Nombre : "N/A";
+                            string fechaFormateada = v.fecha.ToString("yyyy-MM-dd HH:mm");
+                            string totalFormateado = $"${v.total:F2}";
+
+                            Console.WriteLine($"{v.codigoVenta,-15} {fechaFormateada,-22} {nombreEmp,-20} {totalFormateado,12}");
+                        }
+                    }
+                    Console.WriteLine(new string('-', 72));
+
+                    Console.WriteLine("\nIngrese el ID de la venta para ver sus detalles (o presione ENTER para salir):");
+                    string idBuscado = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(idBuscado))
+                    {
+                        List<VentaProductos> detalles = rVentaHist.ObtenerDetallesVenta(idBuscado);
+
+                        Console.Clear();
+                        Console.WriteLine($"======================== DETALLES DE LA VENTA: {idBuscado} ========================");
+                        // Anchos fijos: Producto (42), Precio U. (12), Cantidad (10), Total (12)
+                        Console.WriteLine($"{"Producto",-42} {"Precio U.",12} {"Cantidad",10} {"Total",12}");
+                        Console.WriteLine(new string('-', 78));
+
+                        decimal granTotal = 0;
+                        foreach (VentaProductos d in detalles)
+                        {
+                            // Truncar nombre del producto si sobrepasa los 40 caracteres para no romper la tabla
+                            string nombreProd = d.Producto.Nombre.Length > 40
+                                ? d.Producto.Nombre.Substring(0, 37) + "..."
+                                : d.Producto.Nombre;
+
+                            string precioU = $"${d.Producto.Precio:F2}";
+                            string totalItem = $"${d.Total:F2}";
+
+                            Console.WriteLine($"{nombreProd,-42} {precioU,12} {d.Cantidad,10} {totalItem,12}");
+                            granTotal += d.Total;
+                        }
+
+                        Console.WriteLine(new string('-', 78));
+                        Console.WriteLine($"{"Total Venta:",66} ${granTotal,9:F2}");
+                    }
+
+                    Console.WriteLine("\nPresione cualquier tecla para continuar...");
+                    Console.ReadKey();
                     break;
                 default:
                     Console.WriteLine("Acción no válida.");
