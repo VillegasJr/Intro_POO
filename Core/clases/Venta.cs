@@ -14,7 +14,7 @@ namespace Core.clases
         public DateTime fecha { get; set; }
         public decimal total { get; set; }
 
-        public void AgregraProducto(Producto producto, decimal cantidad)
+        public void AgregarProducto(Producto producto, decimal cantidad)
         {
             // Precio por cantidad de productos
             decimal productosT = producto.Precio * cantidad;
@@ -33,6 +33,8 @@ namespace Core.clases
         public Venta()
         {
             productos = new List<VentaProductos>();
+            codigoVenta = GenerarCodigoVenta();
+            fecha = DateTime.Now;
         }
         // Constructor de la clase Venta
         public Venta(Empleado empleadoLogueado)
