@@ -11,6 +11,12 @@ namespace Core.clases
         public string Nombre { get; set; }
         public decimal Precio { get; set; }
 
+        // Sobrescribir ToString para que el DataGridView muestre el Nombre directamente
+        public override string ToString()
+        {
+            return Nombre;
+        }
+
         public void MostrarInfo()
         {
             Console.WriteLine($"ID: {ID}");
