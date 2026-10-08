@@ -218,11 +218,11 @@ namespace Core.interfaces.Repositorios
 
         //================================================================
         // ESTOS MODELOS NO SE HACEN USO AQUI.
-        public Producto ObtenerID(int ID)
+        public Response<Empleado> ObtenerID(int ID)
         {
             throw new NotImplementedException();
         }
-        public void RegistrarVenta(Empleado obj)
+        public Response<Empleado> RegistrarVenta(Empleado obj)
         {
             throw new NotImplementedException();
         }

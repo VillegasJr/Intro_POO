@@ -24,11 +24,11 @@ namespace Core.interfaces
         //=============================================================================================
 
         // ======================== Implementado en RProductos ========================
-        Producto ObtenerID(int ID);
+        Response<T> ObtenerID(int ID);
         // =============================================================================
 
         // ======================== Implementado en Rventa ========================
-        public void RegistrarVenta(T obj);
+        public Response<T> RegistrarVenta(T obj);
         public int GenerarCodigo();
         public List<Venta> HistorialVenta();
         //=========================================================================

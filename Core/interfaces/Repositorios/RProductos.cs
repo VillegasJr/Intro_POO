@@ -176,9 +176,10 @@ namespace Core.interfaces.Repositorios
             return productosBusqueda;
         }
 
-        public Producto ObtenerID(int ID)
+        public Response<Producto> ObtenerID(int ID)
         {
             Producto producto = null;
+            Response<Producto> response = new Response<Producto>();
             MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
             MySqlCommand comando = new MySqlCommand("SELECT * FROM productos WHERE ID = @ID", conexion);
             comando.Parameters.AddWithValue("@ID", ID);
@@ -190,31 +191,51 @@ namespace Core.interfaces.Repositorios
 
                 if (lector.HasRows && lector.Read())
                 {
+                    // Se crea un nuevo objeto Producto y se asignan los valores obtenidos de la base de datos
                     producto = new Producto();
                     producto.ID = lector.GetInt32("ID");
                     producto.Nombre = lector.GetString("Nombre");
                     producto.Precio = lector.GetDecimal("Precio");
-                }
 
+                    /* Control de Errores */
+                    // Si se encuentra el producto, se asignan los valores a la respuesta
+                    response.Codigo = 200;
+                    response.Mensaje = "Producto encontrado";
+                    response.Datos = producto;
+                }
+                else
+                {
+                    /* Control de Errores */
+                    // Si no se encuentra el producto, se asigna un código de error y un mensaje
+                    response.Codigo = 404;
+                    response.Mensaje = "Producto no encontrado";
+                    response.Datos = null;
+                }
                 lector.Close();
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine($"Error al obtener el Producto por ID: {ex.Message}");
+
+                /* Control de Errores */
+                response.Codigo = 500;
+                response.Mensaje = $"Error al obtener el producto: {ex.Message}";
+                response.Datos = null;
             }
             finally
             {
                 conexion.Close();
             }
 
-            return producto;
+            return response;
 
         }
 
 
 
         // ==================== NO SE USA ESTE MODELO AQUI ====================
-        public void RegistrarVenta(Producto obj)
+        public Response<Producto> RegistrarVenta(Producto obj)
         {
             throw new NotImplementedException();
         }

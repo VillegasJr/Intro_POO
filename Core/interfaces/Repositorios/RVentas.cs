@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Text;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Core.interfaces.Repositorios
 {
     public class RVentas : IRepositorio<Venta>
     {
-        public void RegistrarVenta(Venta venta)
+        public Response<Venta> RegistrarVenta(Venta venta)
         {
             MySqlConnection conexion = new MySqlConnection(Utils.MySqlConexion);
+            Response<Venta> response = new Response<Venta>();
 
             try
             {
@@ -38,18 +40,24 @@ namespace Core.interfaces.Repositorios
                     comandoDetalles.Parameters.AddWithValue("@Total", prod.Total);
                     comandoDetalles.ExecuteNonQuery();
                 }
+                response.Codigo = 200;
+                response.Mensaje = "Venta registrada correctamente";
+                response.Datos = venta;
 
                 transaction.Commit();
                 Console.WriteLine("Venta Guardada - ID: " + venta.codigoVenta);
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Error al registrar la venta " + ex.Message);
+                response.Codigo = 500;
+                response.Mensaje = "Error BD: " + ex.Message;
+                response.Datos = null;
             }
             finally
             {
                 conexion.Close();
             }
+            return response;
         }
 
         public int GenerarCodigo()
@@ -78,7 +86,6 @@ namespace Core.interfaces.Repositorios
             finally
             {
                 conexion.Close();
-                // Aquí podrías agregar cualquier limpieza necesaria, aunque en este caso no hay recursos que liberar.
             }
             return cantidad;
         }
@@ -182,7 +189,7 @@ namespace Core.interfaces.Repositorios
         {
             throw new NotImplementedException();
         }
-        public Producto ObtenerID(int ID)
+        public Response<Venta> ObtenerID(int ID)
         {
             throw new NotImplementedException();
         }
