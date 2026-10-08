@@ -399,8 +399,8 @@ void Acciones() {
                         Console.Write("Cantidad de productos: ");
                         decimal cant = Convert.ToDecimal(Console.ReadLine());
 
-                        Producto InfPro = rProducto.ObtenerID(prdID);
-                        venta.AgregraProducto(InfPro, cant);
+                        Producto InfPro = rProducto.ObtenerID(prdID).Datos;
+                        venta.AgregarProducto(InfPro, cant);
 
                         Console.WriteLine("Agregar otro producto");
                         Console.WriteLine("A: Agregar");
