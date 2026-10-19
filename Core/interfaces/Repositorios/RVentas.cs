@@ -49,9 +49,19 @@ namespace Core.interfaces.Repositorios
             }
             catch(Exception ex)
             {
+                RLogs rLogs = new RLogs();
+                Log log = new Log();
+                log.fecha = DateTime.Now;
+                log.mensaje = ex;
+                log.empleado = venta.empleado;
+                log.tipo = 2; // Tipo de log para errores de venta
+                rLogs.GuardarLog(log);
+
+                /*
                 response.Codigo = 500;
                 response.Mensaje = "Error BD: " + ex.Message;
                 response.Datos = null;
+                */
             }
             finally
             {

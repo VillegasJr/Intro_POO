@@ -218,7 +218,7 @@ namespace Core.interfaces.Repositorios
             {
                 Console.WriteLine($"Error al obtener el Producto por ID: {ex.Message}");
 
-                /* Control de Errores */
+                // Control de Errores
                 response.Codigo = 500;
                 response.Mensaje = $"Error al obtener el producto: {ex.Message}";
                 response.Datos = null;
