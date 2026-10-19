@@ -35,13 +35,13 @@ namespace Market
             if (!int.TryParse(textBox1.Text, out int idProducto)) // Validar que el ID del producto sea un número entero
             // El out int idProducto crea una variable temporal para almacenar el valor convertido si la conversión es exitosa
             {
-                MessageBox.Show("Por favor, ingrese un ID de producto válido.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, ingrese un ID de producto válido.", "Advertencia");
                 return;
             }
 
             if (!decimal.TryParse(textBox2.Text, out decimal cantidad) || cantidad <= 0)
             {
-                MessageBox.Show("Por favor, ingrese una cantidad mayor a cero.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, ingrese una cantidad mayor a cero.", "Advertencia");
                 return;
             }
 
@@ -68,20 +68,16 @@ namespace Market
                 textBox2.Clear();
                 textBox1.Focus();
             }
-            else if (response.Codigo == 404)
+            else 
             {
-                MessageBox.Show("Error: " + response.Mensaje, "Producto no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Error al obtener el producto: " + response.Mensaje, "Error BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Producto no encontrado");
             }
         }
         private void Bt_Cobrar_Click(object sender, EventArgs e)
         {
             if (venta.productos == null || venta.productos.Count == 0)
             {
-                MessageBox.Show("No hay productos agregados en la venta actual.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No hay productos agregados en la venta actual.", "Atención");
                 return;
             }
 
@@ -90,12 +86,10 @@ namespace Market
 
             if (response.Codigo == 200)
             {
-                MessageBox.Show(
-                    $"Venta registrada correctamente.\nAtendió: {venta.empleado.Nombre}\nCódigo: {venta.codigoVenta}",
-                    "Éxito",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
+                MessageBox.Show($"Venta registrada correctamente.\n" +
+                    $"Atendió: {venta.empleado.Nombre}\n" +
+                    $"Código: {venta.codigoVenta}",
+                    "Éxito");
 
                 // Reiniciar la venta conservando el empleado activo
                 venta = new Venta(empleadoLogueado);
@@ -104,7 +98,7 @@ namespace Market
             }
             else
             {
-                MessageBox.Show("Error al registrar la venta: " + response.Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al registrar la venta: " + response.Mensaje, "Error");
             }
         }
     }
